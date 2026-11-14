@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>نزيه | اليوم العالمي لمكافحة الفساد — جامعة حائل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ====== الترويسة: الشعارات ====== -->
+<header class="topbar">
+  <img src="assets/uoh-logo.png" alt="جامعة حائل" class="logo logo-uoh">
+  <div class="event-title">
+    <span class="event-day">٩ ديسمبر</span>
+    <strong>اليوم العالمي لمكافحة الفساد</strong>
+    <small>جامعة حائل × هيئة الرقابة ومكافحة الفساد</small>
+  </div>
+  <img src="assets/nazaha-logo.jpg" alt="هيئة الرقابة ومكافحة الفساد - نزاهة" class="logo logo-nazaha">
+</header>
+
+<main>
+  <!-- ====== الشاشة 1: المساعد ====== -->
+  <section id="view-assistant" class="view active">
+    <div class="stage">
+      <div class="stage-glow"></div>
+
+      <!-- مكان الشخصية: ضع ملفاتك في مجلد assets — راجع README -->
+      <div id="avatarBox" class="avatar-box">
+        <video id="vidIdle" muted loop playsinline preload="auto"></video>
+        <video id="vidTalk" muted loop playsinline preload="auto"></video>
+        <img id="avatarImg" alt="نزيه">
+        <div id="avatarPlaceholder" class="avatar-placeholder">مكان الشخصية<br><small>ضع ملفاتك في مجلد assets</small></div>
+      </div>
+
+      <div class="name-tag">
+        <strong>نزيه</strong>
+        <span>مساعدك الافتراضي في النزاهة ومكافحة الفساد</span>
+      </div>
+    </div>
+
+    <div class="chat-panel">
+      <div id="status" class="status">اضغط على المايك واسألني 👇</div>
+      <div id="chatLog" class="chat-log" aria-live="polite"></div>
+
+      <div class="chips" id="chips">
+        <button class="chip">وش هي جرائم الفساد حسب النظام؟</button>
+        <button class="chip">كيف أبلّغ عن فساد؟</button>
+        <button class="chip">ليش ٩ ديسمبر يوم مكافحة الفساد؟</button>
+        <button class="chip">وش اختصاصات نزاهة؟</button>
+        <button class="chip">هل المبلّغ محمي؟</button>
+        <button class="chip">وش يصير لو زادت ثروة الموظف فجأة؟</button>
+      </div>
+
+      <div class="input-row">
+        <button id="micBtn" class="mic-btn" aria-label="تحدث">
+          <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z"/></svg>
+        </button>
+        <form id="textForm" class="text-form">
+          <input id="textInput" type="text" placeholder="أو اكتب سؤالك هنا..." autocomplete="off">
+          <button type="submit">إرسال</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== الشاشة 2: الأنظمة ====== -->
+  <section id="view-laws" class="view">
+    <h2 class="view-title">الأنظمة ذات العلاقة</h2>
+    <p class="view-sub">المصدر: هيئة الخبراء بمجلس الوزراء — <span dir="ltr">laws.boe.gov.sa</span></p>
+
+    <div class="law-cards">
+      <article class="law-card featured">
+        <div class="law-head">
+          <h3>نظام هيئة الرقابة ومكافحة الفساد</h3>
+          <span class="badge">النص الكامل</span>
+        </div>
+        <p class="law-meta">صدر بالمرسوم الملكي رقم (م/25) وتاريخ 1446/1/23هـ — ويُعمل به بعد (90) يوماً من نشره في الجريدة الرسمية.</p>
+        <input id="lawSearch" class="law-search" type="search" placeholder="ابحث في مواد النظام... (مثال: الرشوة، الثروة، المحكمة)">
+        <div id="lawArticles" class="articles"></div>
+      </article>
+
+      <article class="law-card">
+        <h3>نظام مكافحة الرشوة</h3>
+        <p class="law-meta">صدر بالمرسوم الملكي رقم (م/36) وتاريخ 29/12/1412هـ</p>
+        <p>يجرّم طلب الموظف العام أو قبوله أو أخذه وعداً أو عطية مقابل أداء عمل من أعمال وظيفته أو الامتناع عنه — ولو كان العمل مشروعاً — ويعاقب الراشي والوسيط كذلك. وبموجب المرسوم الملكي (م/25) حلّت عبارة «هيئة الرقابة ومكافحة الفساد» محل «رئاسة أمن الدولة» أينما وردت في هذا النظام.</p>
+      </article>
+
+      <article class="law-card">
+        <h3>نظام حماية المبلّغين والشهود والخبراء والضحايا</h3>
+        <p class="law-meta">وافق عليه مجلس الوزراء عام 1445هـ (2024م)</p>
+        <p>يهدف إلى تشجيع الإبلاغ عن المخالفات والجرائم، ويوفّر الحماية اللازمة للمبلّغين والشهود والخبراء والضحايا، ويحفظ سرية هوياتهم، ويمنع إلحاق الضرر بهم بسبب بلاغاتهم أو شهاداتهم.</p>
+      </article>
+
+      <article class="law-card">
+        <h3>الاستراتيجية الوطنية لحماية النزاهة ومكافحة الفساد</h3>
+        <p>إطار وطني لحماية النزاهة ومكافحة الفساد، وقد ألزم قرار مجلس الوزراء رقم (68) الجهاتِ المعنية بتنفيذ ما نصت عليه، وإفادة الهيئة دورياً بما قامت به.</p>
+      </article>
+
+      <article class="law-card">
+        <h3>اتفاقية الأمم المتحدة لمكافحة الفساد</h3>
+        <p>اعتمدتها الجمعية العامة للأمم المتحدة عام 2003م، وفُتح باب التوقيع عليها في 9 ديسمبر من العام نفسه — ولذلك يُحتفى بهذا التاريخ عالمياً يوماً لمكافحة الفساد. والمملكة دولة طرف فيها.</p>
+      </article>
+    </div>
+    <a class="boe-link" href="https://laws.boe.gov.sa" target="_blank" rel="noopener">تصفّح جميع الأنظمة في موقع هيئة الخبراء ←</a>
+  </section>
+
+  <!-- ====== الشاشة 3: الأسئلة ====== -->
+  <section id="view-quiz" class="view">
+    <h2 class="view-title">اختبر نزاهتك المعرفية</h2>
+    <p class="view-sub">أسئلة من نظام هيئة الرقابة ومكافحة الفساد</p>
+    <div id="quiz" class="quiz"></div>
+  </section>
+
+  <!-- ====== الشاشة 4: بلّغ ====== -->
+  <section id="view-report" class="view">
+    <h2 class="view-title">شفت فساد؟ بلّغ</h2>
+    <p class="view-sub">هيئة الرقابة ومكافحة الفساد تحافظ على سرية معلومات المبلّغ</p>
+    <div class="report-grid">
+      <div class="report-card big"><span class="r-icon">☎</span><strong dir="ltr">980</strong><span>الرقم المجاني</span></div>
+      <div class="report-card"><span class="r-icon">✉</span><strong dir="ltr">980@nazaha.gov.sa</strong><span>البريد الإلكتروني</span></div>
+      <div class="report-card"><span class="r-icon">🌐</span><strong dir="ltr">nazaha.gov.sa</strong><span>خدمة البلاغات الإلكترونية والتطبيق</span></div>
+    </div>
+    <div class="report-notes">
+      <p>✔ يمكنك تقديم البلاغ دون ذكر اسمك، بشرط أن تكون المعلومات قابلة للتحقق والتتبع.</p>
+      <p>✔ من اختصاصات الهيئة اتخاذ جميع الإجراءات لحماية من يبلّغ أو يدلي بمعلومات عن جرائم الفساد (المادة الرابعة، الفقرة 7).</p>
+      <p>✔ الجرائم التي تُعد فساداً: الرشوة، الاعتداء على المال العام، إساءة استعمال السلطة، وأي جريمة يُنص نظاماً على أنها فساد (المادة الثانية).</p>
+    </div>
+    <div class="countdown-box">
+      <span>متبقي على اليوم العالمي لمكافحة الفساد</span>
+      <div id="countdown" class="countdown"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ====== شريط التنقل السفلي ====== -->
+<nav class="bottom-nav">
+  <button data-view="assistant" class="active"><span>🎙</span>اسأل نزيه</button>
+  <button data-view="laws"><span>⚖</span>الأنظمة</button>
+  <button data-view="quiz"><span>✅</span>الأسئلة</button>
+  <button data-view="report"><span>📣</span>بلّغ</button>
+</nav>
+
+<audio id="ttsAudio" crossorigin="anonymous"></audio>
+<script src="js/law-data.js"></script>
+<script src="js/quiz-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
