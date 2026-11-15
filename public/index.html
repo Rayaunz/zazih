@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f4eee6">
+<title>نزيه | اليوم العالمي لمكافحة الفساد — جامعة حائل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ====== العنوان ====== -->
+  <header class="top glass">
+    <img class="logo" src="assets/uoh-logo.png" alt="جامعة حائل">
+    <div class="ttl">
+      <h1>اليوم العالمي لمكافحة الفساد</h1>
+      <p><span class="date">9 ديسمبر</span><span class="slogan">معاً .. لمجتمع نزيه وشفاف</span></p>
+    </div>
+    <img class="logo" src="assets/nazaha-logo.jpg" alt="هيئة الرقابة ومكافحة الفساد - نزاهة">
+  </header>
+
+  <!-- ====== الشخصية ====== -->
+  <div id="stage">
+    <div class="stage-box">
+      <canvas id="cv" width="2322" height="768" role="img" aria-label="الشخصية الافتراضية نزيه"></canvas>
+    </div>
+    <!-- شخصية D-ID الحية تُعرض هنا (إن اشتغلت)، وإلا تبقى الصورة المتحركة أعلاه -->
+    <div id="did"></div>
+    <div class="talk-badge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="lower">
+    <!-- ====== بطاقة نزيه والإجابة ====== -->
+    <section id="caption" class="glass" aria-live="polite">
+      <div class="who"><b>نزيه</b><span>مساعدك الافتراضي للنزاهة ومكافحة الفساد</span></div>
+      <p id="capQ" class="q" hidden></p>
+      <p id="capA"></p>
+    </section>
+
+    <!-- ====== الأسئلة المتحركة ====== -->
+    <div class="carousel-wrap">
+      <div id="carousel" class="carousel" role="list" aria-label="أسئلة مقترحة، اسحب للمزيد"></div>
+    </div>
+
+    <!-- ====== المايك ====== -->
+    <div class="mic-zone">
+      <div class="wave" id="waveR"></div>
+      <button id="micBtn" class="mic-btn" aria-label="اضغط للتحدث">
+        <svg viewBox="0 0 24 24"><path class="fill" d="M12 15a3.500 3.500 0 0 0 3.500-3.500v-6a3.500 3.500 0 0 0-7 0v6A3.500 3.500 0 0 0 12 15z"/><path d="M6 11.500a6 6 0 0 0 12 0M12 17.500V21M9 21h6"/></svg>
+      </button>
+      <div class="wave" id="waveL"></div>
+    </div>
+    <div id="status" class="status" role="status">اضغط للتحدث</div>
+
+    <!-- ====== الكتابة والإعدادات ====== -->
+    <div class="input-row">
+      <form id="textForm" class="text-form glass">
+        <input id="textInput" type="text" placeholder="اكتب سؤالك هنا .." autocomplete="off" enterkeyhint="send" aria-label="اكتب سؤالك">
+        <button type="submit" aria-label="إرسال"><svg viewBox="0 0 24 24"><path d="M3 11.500 21 3l-6.500 18-3-7.500z"/></svg></button>
+      </form>
+      <button id="settingsBtn" class="settings-btn glass"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.400 13a7.600 7.600 0 0 0 0-2l2-1.500-2-3.500-2.400 1a7.600 7.600 0 0 0-1.700-1L15 3.500h-4l-.300 2.500a7.600 7.600 0 0 0-1.700 1l-2.400-1-2 3.500 2 1.500a7.600 7.600 0 0 0 0 2l-2 1.500 2 3.500 2.400-1a7.600 7.600 0 0 0 1.700 1l.300 2.500h4l.300-2.500a7.600 7.600 0 0 0 1.700-1l2.400 1 2-3.500z"/></svg><span>الإعدادات</span></button>
+    </div>
+
+    <!-- ====== اللوحات (تفتح فوق الجزء السفلي والشخصية تبقى ظاهرة) ====== -->
+    <section class="sheet" id="sheet-quiz" hidden aria-label="اختبر نفسك">
+      <header><h2>اختبر نفسك</h2><button class="x" data-close aria-label="إغلاق">✕</button></header>
+      <div class="sheet-body" id="quiz"></div>
+    </section>
+
+    <section class="sheet" id="sheet-laws" hidden aria-label="الأنظمة">
+      <header><h2>الأنظمة واللوائح ذات العلاقة</h2><button class="x" data-close aria-label="إغلاق">✕</button></header>
+      <div class="sheet-body">
+        <p class="sub">المصدر: هيئة الخبراء بمجلس الوزراء — <span dir="ltr">laws.boe.gov.sa</span></p>
+        <input id="lawSearch" class="law-search" type="search" placeholder="ابحث في جميع الأنظمة... (مثال: الرشوة، التزوير، المبلّغ)">
+        <p id="lawCount" class="meta" aria-live="polite"></p>
+        <div id="lawList"></div>
+        <article class="card">
+          <h3>الاستراتيجية الوطنية لحماية النزاهة ومكافحة الفساد</h3>
+          <p>إطار وطني لحماية النزاهة ومكافحة الفساد، وقد ألزم قرار مجلس الوزراء رقم (68) الجهاتِ المعنية بتنفيذ ما نصت عليه، وإفادة الهيئة دورياً بما قامت به.</p>
+        </article>
+        <article class="card">
+          <h3>اتفاقية الأمم المتحدة لمكافحة الفساد</h3>
+          <p>اعتمدتها الجمعية العامة للأمم المتحدة عام 2003م، وفُتح باب التوقيع عليها في 9 ديسمبر من العام نفسه — ولذلك يُحتفى بهذا التاريخ عالمياً يوماً لمكافحة الفساد. والمملكة دولة طرف فيها.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="sheet" id="sheet-report" hidden aria-label="قنوات البلاغ">
+      <header><h2>قنوات البلاغ عن الفساد</h2><button class="x" data-close aria-label="إغلاق">✕</button></header>
+      <div class="sheet-body">
+        <div class="report-grid">
+          <div class="report-card big"><strong dir="ltr">980</strong><span>الرقم المجاني</span></div>
+          <div class="report-card"><strong dir="ltr">980@nazaha.gov.sa</strong><span>البريد الإلكتروني</span></div>
+          <div class="report-card"><strong dir="ltr">nazaha.gov.sa</strong><span>البلاغات الإلكترونية والتطبيق</span></div>
+        </div>
+        <ul class="notes">
+          <li>يمكنك تقديم البلاغ دون ذكر اسمك، بشرط أن تكون المعلومات قابلة للتحقق والتتبع.</li>
+          <li>من اختصاصات الهيئة اتخاذ جميع الإجراءات لحماية من يبلّغ أو يدلي بمعلومات عن جرائم الفساد (المادة الرابعة، الفقرة 7).</li>
+          <li>نزيه لا يستقبل البلاغات ولا يحفظ أي بيانات؛ البلاغ يكون عبر القنوات الرسمية أعلاه فقط.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sheet" id="sheet-rate" hidden aria-label="قيّم تجربتك">
+      <header><h2>قيّم تجربتك مع نزيه</h2><button class="x" data-close aria-label="إغلاق">✕</button></header>
+      <div class="sheet-body center">
+        <p id="rateMsg">كيف كانت تجربتك؟ اختر عدد النجوم.</p>
+        <div class="stars" id="stars" role="radiogroup" aria-label="التقييم من خمس نجوم">
+          <button data-v="1" aria-label="نجمة واحدة">★</button><button data-v="2" aria-label="نجمتان">★</button><button data-v="3" aria-label="ثلاث نجوم">★</button><button data-v="4" aria-label="أربع نجوم">★</button><button data-v="5" aria-label="خمس نجوم">★</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ====== الترحيب ====== -->
+  <div id="onboard" class="onboard" hidden>
+    <div class="onboard-card glass">
+      <h2>حياك الله، أنا نزيه</h2>
+      <p>مساعدك الافتراضي في اليوم العالمي لمكافحة الفساد</p>
+      <ul>
+        <li><svg viewBox="0 0 24 24"><path class="fill" d="M12 15a3.500 3.500 0 0 0 3.500-3.500v-6a3.500 3.500 0 0 0-7 0v6A3.500 3.500 0 0 0 12 15z"/><path d="M6 11.500a6 6 0 0 0 12 0M12 17.500V21"/></svg>اضغط المايك واسألني بصوتك</li>
+        <li><svg viewBox="0 0 24 24"><path d="M4 8h12M4 8l4-4M4 8l4 4M20 16H8m12 0-4-4m4 4-4 4"/></svg>اسحب الأسئلة يميناً ويساراً واختر ما يهمك</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.500 12 2.500 2.500 4.500-5"/></svg>قل «اختبرني» أو اضغط «اختبر نفسك»</li>
+      </ul>
+      <button id="startBtn" class="primary">ابدأ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== نافذة الإعدادات ====== -->
+<dialog id="settings">
+  <h3>الإعدادات</h3>
+  <label class="row local-only">مستوى الصوت<input id="setVol" type="range" min="0" max="1" step="0.05" value="1"></label>
+  <label class="row local-only">نطق الإجابات بالصوت<input id="setVoice" type="checkbox" checked></label>
+  <label class="row">خط أكبر<input id="setBig" type="checkbox"></label>
+  <label class="row local-only">إظهار خانة الكتابة<input id="setText" type="checkbox" checked></label>
+  <div class="btns">
+    <button id="setNew">محادثة جديدة</button>
+    <button id="setFull">ملء الشاشة</button>
+  </div>
+  <button id="setClose" class="primary">تم</button>
+</dialog>
+
+<!-- ====== ربط شخصية D-ID ======
+     لإيقافها والرجوع للصورة المتحركة: احذف وسم script التالي كاملاً.
+     لتغيير الوكيل: غيّر data-client-key و data-agent-id (والنطاق يُضاف في Allowed domains عند D-ID). -->
+<script type="module"
+      src="https://agent.d-id.com/v2/index.js"
+      data-mode="full"
+      data-target-id="did"
+      data-client-key="ck_4zr4gIj2RmRwxpeqfv189"
+      data-agent-id="v2_agt_WXjEEOts"
+      data-name="did-agent"
+      data-monitor="true"
+      data-light-mode="true"
+      data-orientation="horizontal"
+      data-show-agent-name="false">
+</script>
+
+<script src="js/law-data.js"></script>
+<script src="js/laws-extra.js"></script>
+<script src="js/quiz-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

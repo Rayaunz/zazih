@@ -1,0 +1,276 @@
+/* =========================================================
+ *  نزيه — شاشة واحدة تفاعلية (رخامي دافئ + أخضر + ذهبي)
+ *  كل المقاسات بوحدة --u التي تتغير تلقائياً حسب الشاشة
+ * ========================================================= */
+:root{
+  --green:#1B5E20; --green-2:#2E7D32; --green-soft:#e6f1e7; --gold:#C9A84C; --gold-d:#9a7b2a;
+  --ink:#17261c; --muted:#5d6b61; --red:#c0392b;
+  --glass:rgba(255,255,255,.74); --stroke:rgba(255,255,255,.95); --line:rgba(110,80,40,.2);
+  --shadow:0 calc(1.2*var(--u)) calc(4*var(--u)) rgba(22,60,32,.13);
+  --fs:1;                                   /* مضاعف حجم الخط (إعداد «خط أكبر») */
+  --u:min(1vw,.5625dvh);                     /* الشاشات الطولية */
+  --side:max(calc(3*var(--u)),calc((100vw - 200*var(--u))/2));
+}
+@media (min-aspect-ratio:1/1){:root{--u:calc(100dvh/130)}}   /* الشاشات العرضية */
+body.big{--fs:1.16}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#f1eae0;color:var(--ink);
+  font-family:"IBM Plex Sans Arabic","Tajawal","Segoe UI",Tahoma,sans-serif;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none;touch-action:manipulation}
+svg{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+svg .fill{fill:currentColor;stroke:none}
+.glass{background:var(--glass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border:1px solid var(--stroke);box-shadow:var(--shadow)}
+:focus-visible{outline:calc(.5*var(--u)) solid var(--gold);outline-offset:calc(.4*var(--u))}
+
+#app{position:relative;height:100dvh;width:100vw;display:flex;flex-direction:column;overflow:hidden;
+  background:
+    radial-gradient(90% 55% at 50% 108%,rgba(138,98,58,.20),transparent 70%),
+    radial-gradient(60% 40% at 0% 60%,rgba(201,168,76,.14),transparent 70%),
+    linear-gradient(180deg,#efe6da 0%,#f8f4ee 38%,#f0e8dc 100%)}
+
+/* ---------- العنوان ---------- */
+.top{flex:none;display:flex;align-items:center;justify-content:center;gap:calc(2.5*var(--u));
+  margin:calc(1.6*var(--u)) var(--side) 0;padding:calc(1.4*var(--u)) calc(3*var(--u));border-radius:calc(4*var(--u));position:relative;z-index:3}
+.top .logo{flex:none;height:calc(9*var(--u));width:calc(10*var(--u));object-fit:contain;mix-blend-mode:multiply}
+.ttl{flex:1;min-width:0;text-align:center}
+.ttl h1{font-size:calc(4.4*var(--u));font-weight:700;color:var(--green);line-height:1.35}
+.ttl p{display:flex;justify-content:center;flex-wrap:wrap;column-gap:calc(3*var(--u));font-size:calc(3.1*var(--u))}
+.ttl .date{font-weight:600}
+.ttl .slogan{color:var(--gold-d)}
+
+/* ---------- الشخصية: الحركة محصورة داخل هذا الإطار فقط ---------- */
+#stage{flex:2 1 calc(62*var(--u));min-height:calc(42*var(--u));max-height:calc(96*var(--u));position:relative;width:100%;
+  overflow:hidden;contain:paint;container-type:size;display:flex;justify-content:center;margin-top:calc(-3*var(--u))}
+.stage-box{position:relative;height:100%;width:min(100cqi,302cqb);
+  -webkit-mask-image:linear-gradient(#000 80%,transparent),linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+  mask-image:linear-gradient(#000 80%,transparent),linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+  -webkit-mask-composite:source-in;mask-composite:intersect}
+#cv{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%}
+/* ===== شخصية D-ID الحية: تأخذ الصفحة كاملة، والعنوان والأسئلة تطفو فوقها ===== */
+#did{position:absolute;inset:0;z-index:2;display:none}
+#did>*{width:100%!important;height:100%!important}
+body.did-on{--dock:calc(14.5*var(--u))}
+body.did-on #stage{position:absolute;inset:0 0 var(--dock) 0;flex:none;min-height:0;max-height:none;margin:0;background:#1c140c}
+/* خلفية ضبابية من الاستديو تملأ الجانبين في الشاشات الأعرض من الفيديو */
+body.did-on #stage::before{content:"";position:absolute;inset:-6%;background:url(../assets/avatar.jpg) center/cover;filter:blur(30px) brightness(.75)}
+body.did-on .stage-box,body.did-on .talk-badge,body.did-on .mic-zone,body.did-on .text-form,body.did-on .row.local-only{display:none}
+/* فيديو نزيه بنسبة 16:9 فيملأ عرض الشاشة، ولا يتجاوز 2.1 من الارتفاع في الشاشات العريضة جداً حتى لا يُقصّ الرأس */
+body.did-on #did{display:block;inset:0 auto 0 50%;transform:translateX(-50%);width:min(100cqi,210cqb);height:100%}
+body.did-on .top{position:absolute;top:calc(1.4*var(--u));left:0;right:0;margin-top:0;z-index:6;padding-block:calc(.8*var(--u));background:rgba(255,255,255,.8)}
+body.did-on .top .logo{height:calc(7*var(--u));width:calc(8*var(--u))}
+body.did-on .ttl h1{font-size:calc(3.9*var(--u))}
+body.did-on .ttl p{font-size:calc(2.7*var(--u))}
+body.did-on .lower{position:absolute;inset:0;margin:0;z-index:5;justify-content:flex-end;pointer-events:none}
+body.did-on .lower>*{pointer-events:auto}
+/* الإجابة المكتوبة تظهر مؤقتاً فوق أزرار D-ID ثم تختفي */
+body.did-on #caption{display:none;flex:none;min-height:0;max-height:calc(26*var(--u));margin-bottom:calc(15*var(--u));background:rgba(255,255,255,.9);animation:rise .25s ease-out}
+body.did-on #caption.show{display:block}
+body.did-on .carousel-wrap{margin:0;height:var(--dock);display:flex;align-items:center;background:linear-gradient(#f4eee6,#efe6da)}
+body.did-on .carousel{width:100%;padding-block:calc(1*var(--u))}
+body.did-on .status{display:none}
+body.did-on .status.err{display:block;position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--dock) + 15*var(--u));max-width:92%;padding:calc(1*var(--u)) calc(3*var(--u));border-radius:99px;background:rgba(255,255,255,.95);box-shadow:var(--shadow)}
+body.did-on .input-row{position:absolute;top:calc(20*var(--u));inset-inline-end:calc(2*var(--u));padding:0;z-index:6}
+body.did-on .settings-btn{width:calc(9*var(--u));height:calc(9*var(--u));padding:0;justify-content:center}
+body.did-on .settings-btn span{display:none}
+body.did-on .sheet{inset:40% var(--side) calc(var(--dock) + 1.5*var(--u))}
+@media (min-aspect-ratio:1/1){
+  body.did-on{--dock:calc(12.5*var(--u))}
+  body.did-on .top{margin-inline:max(var(--side),calc((100vw - 120*var(--u))/2))}
+  body.did-on .input-row{top:calc(1.4*var(--u))}
+  body.did-on #caption{height:auto}
+  body.did-on .sheet{inset:30% max(var(--side),calc((100vw - 150*var(--u))/2)) calc(var(--dock) + 1.5*var(--u))}
+}
+
+/* مؤشر الصوت فوق الشخصية وقت الكلام */
+.talk-badge{position:absolute;top:calc(5*var(--u));inset-inline-start:var(--side);display:flex;align-items:center;gap:calc(.7*var(--u));
+  height:calc(6*var(--u));padding:0 calc(2*var(--u));border-radius:99px;background:rgba(27,94,32,.88);opacity:0;transition:opacity .25s}
+.talk-badge i{width:calc(.7*var(--u));height:calc(3.4*var(--u));border-radius:99px;background:#fff;transform:scaleY(.3)}
+#app.talking .talk-badge{opacity:1}
+#app.talking .talk-badge i{animation:eq .7s ease-in-out infinite}
+.talk-badge i:nth-child(2){animation-delay:.12s!important}.talk-badge i:nth-child(3){animation-delay:.3s!important}
+.talk-badge i:nth-child(4){animation-delay:.05s!important}.talk-badge i:nth-child(5){animation-delay:.22s!important}
+@keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+
+/* ---------- الجزء السفلي ---------- */
+.lower{flex:1 1 auto;min-height:0;position:relative;display:flex;flex-direction:column;z-index:2;margin-top:calc(-7*var(--u))}
+
+#caption{flex:1 1 calc(27*var(--u));min-height:calc(18*var(--u));max-height:calc(46*var(--u));overflow:auto;
+  margin:0 var(--side);padding:calc(2*var(--u)) calc(3.4*var(--u));border-radius:calc(4*var(--u));
+  font-size:calc(3.15*var(--u)*var(--fs));line-height:1.75;text-align:center}
+#caption .who{display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;gap:calc(1.6*var(--u));margin-bottom:calc(.6*var(--u));font-size:calc(2.6*var(--u)*var(--fs));color:var(--muted)}
+#caption .who b{color:var(--green);font-size:calc(3.3*var(--u)*var(--fs))}
+#caption .q{color:var(--gold-d);font-weight:600;font-size:calc(2.8*var(--u)*var(--fs))}
+#caption.asked .who{display:none}
+.dots{display:inline-flex;gap:calc(1*var(--u));padding:calc(1.4*var(--u)) 0}
+.dots i{width:calc(1.6*var(--u));height:calc(1.6*var(--u));border-radius:50%;background:var(--green);animation:dot 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(calc(-.8*var(--u)))}}
+
+/* الأسئلة المتحركة: اسحب باللمس */
+.carousel-wrap{flex:none;position:relative;margin-top:calc(2*var(--u));
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.carousel{display:flex;gap:calc(2*var(--u));overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--side);
+  padding:calc(.8*var(--u)) var(--side) calc(1.6*var(--u));scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;cursor:grab}
+.carousel::-webkit-scrollbar{display:none}
+.carousel.drag{cursor:grabbing;scroll-snap-type:none}
+.chip{flex:0 0 auto;scroll-snap-align:start;display:flex;align-items:center;gap:calc(1.8*var(--u));width:calc(43*var(--u));min-height:calc(10*var(--u));
+  padding:calc(1*var(--u)) calc(3*var(--u));border-radius:calc(5*var(--u));background:var(--glass);border:1px solid var(--stroke);box-shadow:0 calc(.6*var(--u)) calc(2.4*var(--u)) rgba(22,60,32,.12);
+  font-size:calc(2.9*var(--u)*var(--fs));line-height:1.35;text-align:start;transition:transform .12s,background .15s}
+.chip svg{flex:none;width:calc(4.8*var(--u));height:calc(4.8*var(--u));color:var(--green)}
+.chip:active{transform:scale(.97);background:#fff}
+.chip.action{background:linear-gradient(135deg,var(--green),var(--green-2));color:#fff;border-color:transparent;font-weight:600}
+.chip.action svg{color:#f3deA0}
+.chip.gold{background:linear-gradient(135deg,#d9bb62,var(--gold));color:#2b2206;border-color:transparent;font-weight:600}
+.chip.gold svg{color:#2b2206}
+.chip.ai{border-color:var(--gold)}
+.chip.ai svg{color:var(--gold-d)}
+
+.mic-zone{flex:none;height:calc(15*var(--u));display:flex;align-items:center;justify-content:center;gap:calc(2.5*var(--u))}
+.mic-btn{flex:none;width:calc(13.5*var(--u));height:calc(13.5*var(--u));border-radius:50%;display:grid;place-items:center;color:var(--green);
+  background:#fff;border:calc(.6*var(--u)) solid var(--green);box-shadow:0 0 0 calc(1.2*var(--u)) rgba(27,94,32,.10),var(--shadow);transition:transform .12s}
+.mic-btn svg{width:calc(7*var(--u));height:calc(7*var(--u));stroke-width:1.9}
+.mic-btn:active{transform:scale(.94)}
+.mic-btn.listening{background:var(--red);border-color:#fff;color:#fff;animation:pulse 1.2s infinite}
+.mic-btn.busy{animation:think 1.1s ease-in-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.55)}100%{box-shadow:0 0 0 calc(5*var(--u)) rgba(192,57,43,0)}}
+@keyframes think{0%,100%{box-shadow:0 0 0 calc(1.2*var(--u)) rgba(201,168,76,.25)}50%{box-shadow:0 0 0 calc(3.4*var(--u)) rgba(201,168,76,.55)}}
+.wave{flex:0 1 calc(27*var(--u));height:calc(7*var(--u));display:flex;align-items:center;justify-content:space-between}
+.wave span{width:calc(.6*var(--u));height:100%;border-radius:99px;background:var(--green);transform:scaleY(.08)}
+.status{flex:none;text-align:center;font-size:calc(3*var(--u)*var(--fs));font-weight:600;line-height:1.4;min-height:calc(4.6*var(--u));color:var(--ink)}
+.status.listening{color:var(--red)}
+.status.err{color:var(--red)}
+
+.input-row{flex:none;display:flex;gap:calc(2*var(--u));padding:calc(1.2*var(--u)) var(--side) calc(2.2*var(--u))}
+.text-form{flex:1;display:flex;align-items:center;border-radius:99px;padding-inline:calc(4*var(--u)) calc(1.2*var(--u));height:calc(9.4*var(--u))}
+.text-form input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--ink);font:inherit;font-size:calc(3.1*var(--u)*var(--fs));user-select:text;-webkit-user-select:text}
+.text-form input::placeholder{color:var(--muted)}
+.text-form button{width:calc(7.4*var(--u));height:calc(7.4*var(--u));display:grid;place-items:center;color:var(--green)}
+.text-form button svg{width:calc(4.8*var(--u));height:calc(4.8*var(--u));transform:scaleX(-1)}
+.settings-btn{flex:none;display:flex;align-items:center;gap:calc(1.6*var(--u));height:calc(9.4*var(--u));padding:0 calc(3.6*var(--u));border-radius:99px;font-size:calc(3*var(--u)*var(--fs))}
+.settings-btn svg{width:calc(4.8*var(--u));height:calc(4.8*var(--u));color:var(--green)}
+body.no-text .text-form{visibility:hidden}
+
+/* ---------- اللوحات: تغطي الجزء السفلي فقط ---------- */
+.sheet{position:absolute;inset:0 var(--side) calc(2*var(--u));z-index:5;display:flex;flex-direction:column;border-radius:calc(4.5*var(--u));
+  background:rgba(250,252,250,.97);border:1px solid var(--stroke);box-shadow:0 calc(2*var(--u)) calc(8*var(--u)) rgba(22,60,32,.25);animation:rise .28s ease-out}
+.sheet[hidden]{display:none}
+@keyframes rise{from{opacity:0;transform:translateY(calc(6*var(--u)))}to{opacity:1;transform:none}}
+.sheet>header{flex:none;display:flex;align-items:center;justify-content:space-between;padding:calc(2*var(--u)) calc(3.4*var(--u));border-bottom:1px solid var(--line)}
+.sheet h2{font-size:calc(3.9*var(--u)*var(--fs));color:var(--green)}
+.sheet .x{width:calc(8*var(--u));height:calc(8*var(--u));border-radius:50%;background:var(--green-soft);color:var(--green);font-size:calc(3.4*var(--u))}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;padding:calc(2.6*var(--u)) calc(3.4*var(--u)) calc(4*var(--u));font-size:calc(3*var(--u)*var(--fs));line-height:1.85}
+.sheet-body.center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(3*var(--u));text-align:center}
+.sub,.meta{color:var(--muted);font-size:calc(2.6*var(--u)*var(--fs))}
+.sub{text-align:center;margin-bottom:calc(2*var(--u))}
+.card{background:#fff;border:1px solid var(--line);border-radius:calc(3.5*var(--u));padding:calc(2.6*var(--u)) calc(3*var(--u));margin-bottom:calc(2.2*var(--u))}
+.card h3{font-size:calc(3.4*var(--u)*var(--fs));color:var(--green);margin-bottom:calc(.4*var(--u))}
+.law-head{display:flex;align-items:center;justify-content:space-between;gap:calc(2*var(--u))}
+.badge{flex:none;border:1px solid var(--gold);color:var(--gold-d);border-radius:99px;font-size:calc(2.3*var(--u));padding:0 calc(2*var(--u))}
+.law-search{width:100%;height:calc(8.4*var(--u));padding:0 calc(3.4*var(--u));margin:calc(1.4*var(--u)) 0 calc(2*var(--u));border-radius:99px;border:1px solid var(--line);background:#f4f7f4;color:var(--ink);font:inherit;font-size:calc(3*var(--u)*var(--fs));outline:none;user-select:text;-webkit-user-select:text}
+details.law{background:#fff;border:1px solid var(--line);border-radius:calc(3.5*var(--u));margin-bottom:calc(1.8*var(--u));overflow:hidden}
+details.law>summary{display:flex;align-items:center;justify-content:space-between;gap:calc(2*var(--u));padding:calc(2.2*var(--u)) calc(3*var(--u));list-style:none;cursor:pointer}
+details.law>summary::-webkit-details-marker{display:none}
+details.law[open]>summary{border-bottom:1px solid var(--line);background:var(--green-soft)}
+.law-name{font-size:calc(3.3*var(--u)*var(--fs));font-weight:700;color:var(--green);line-height:1.5}
+.law-name small{display:block;font-size:calc(2.4*var(--u)*var(--fs));font-weight:400;color:var(--muted)}
+details.law>.articles{padding:calc(2*var(--u))}
+.law-note{margin:calc(2*var(--u)) calc(2*var(--u)) 0;padding:calc(1.2*var(--u)) calc(2.4*var(--u));border-radius:calc(2*var(--u));background:#fbe9e7;color:#8c2b20;font-size:calc(2.7*var(--u)*var(--fs))}
+.pages-box{padding:calc(2*var(--u));display:grid;gap:calc(1.6*var(--u));justify-items:center;background:#eef1ee}
+.pages-box img{width:100%;max-width:calc(150*var(--u));height:auto;aspect-ratio:210/297;background:#fff;border-radius:calc(1.2*var(--u));box-shadow:0 1px 6px rgba(0,0,0,.15)}
+#lawCount{text-align:center;margin-bottom:calc(1.6*var(--u))}
+/* لوحة الأنظمة أطول لتسهيل القراءة */
+body.did-on #sheet-laws{inset-block-start:calc(13*var(--u))}
+.articles details{border:1px solid var(--line);border-radius:calc(2.6*var(--u));margin-bottom:calc(1.2*var(--u));background:#fbfdfb}
+.articles summary{padding:calc(2*var(--u)) calc(2.8*var(--u));font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:calc(2*var(--u));cursor:pointer}
+.articles summary::-webkit-details-marker{display:none}
+.articles summary::after{content:"+";color:var(--green);font-size:calc(4*var(--u));line-height:1}
+.articles details[open] summary::after{content:"−"}
+.articles .body{padding:0 calc(2.8*var(--u)) calc(2.8*var(--u));white-space:pre-line;user-select:text;-webkit-user-select:text}
+.articles .chapter{font-size:calc(2.4*var(--u));color:var(--muted);font-weight:400;margin-inline-start:calc(1.6*var(--u))}
+mark{background:#f3e3ae;color:inherit;border-radius:calc(.6*var(--u));padding:0 calc(.4*var(--u))}
+
+/* الاختبار */
+.q-progress{height:calc(1.3*var(--u));background:var(--green-soft);border-radius:99px;overflow:hidden;margin-bottom:calc(2*var(--u))}
+.q-progress div{height:100%;background:linear-gradient(90deg,var(--gold),var(--green-2));transition:width .4s}
+.q-num{color:var(--muted);font-size:calc(2.6*var(--u)*var(--fs))}
+.q-text{font-size:calc(3.5*var(--u)*var(--fs));font-weight:600;margin:calc(.6*var(--u)) 0 calc(2*var(--u));line-height:1.65}
+.q-opts{display:grid;gap:calc(1.4*var(--u))}
+.q-opt{display:block;width:100%;text-align:start;padding:calc(2.1*var(--u)) calc(3*var(--u));border-radius:calc(2.8*var(--u));border:1.5px solid var(--line);background:#fff;font-size:calc(3.1*var(--u)*var(--fs))}
+.q-opt:active{background:var(--green-soft)}
+.q-opt.correct{border-color:var(--green-2);background:#e3f3e5}
+.q-opt.wrong{border-color:var(--red);background:#fbe9e7}
+.q-exp{border-inline-start:calc(.8*var(--u)) solid var(--gold);background:#fbf6e6;padding:calc(1.6*var(--u)) calc(2.6*var(--u));border-radius:calc(2*var(--u));margin-top:calc(1.6*var(--u))}
+.q-exp b{display:block}
+.btn{display:block;width:100%;margin-top:calc(1.8*var(--u));padding:calc(2.3*var(--u));border-radius:99px;background:var(--green);color:#fff;font-size:calc(3.2*var(--u)*var(--fs));font-weight:700}
+.btn.ghost{background:#fff;color:var(--green);border:1.5px solid var(--green)}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:calc(1.6*var(--u))}
+.score{font-size:calc(11*var(--u));font-weight:700;color:var(--green);direction:ltr;text-align:center;line-height:1.2}
+.score-msg{text-align:center;font-size:calc(3.5*var(--u)*var(--fs));font-weight:600}
+.review{margin-top:calc(2*var(--u));display:grid;gap:calc(1.4*var(--u))}
+.review .card{margin:0;padding:calc(1.8*var(--u)) calc(2.6*var(--u))}
+.review .ok{color:var(--green-2);font-weight:600}.review .no{color:var(--red);font-weight:600}
+
+/* البلاغ */
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:calc(2*var(--u))}
+.report-card{background:#fff;border:1px solid var(--line);border-radius:calc(3.5*var(--u));padding:calc(2.4*var(--u));text-align:center;display:flex;flex-direction:column;gap:calc(.4*var(--u));font-size:calc(2.7*var(--u)*var(--fs));color:var(--muted)}
+.report-card strong{font-size:calc(3.2*var(--u)*var(--fs));color:var(--ink);word-break:break-all}
+.report-card.big{grid-column:1/-1;background:linear-gradient(135deg,var(--green),var(--green-2));border:none;color:#e4f3e5}
+.report-card.big strong{font-size:calc(13*var(--u));line-height:1.1;color:#fff}
+.notes{list-style:none;margin-top:calc(2.2*var(--u));display:grid;gap:calc(1.2*var(--u))}
+.notes li{position:relative;padding-inline-start:calc(4*var(--u))}
+.notes li::before{content:"";position:absolute;inset-inline-start:0;top:calc(2.2*var(--u));width:calc(1.6*var(--u));height:calc(1.6*var(--u));border-radius:50%;background:var(--gold)}
+
+/* التقييم */
+.stars{display:flex;gap:calc(1.6*var(--u));direction:ltr}
+.stars button{font-size:calc(11*var(--u));line-height:1;color:#cfd8d0;transition:transform .12s,color .15s}
+.stars button.on{color:var(--gold)}
+.stars button:active{transform:scale(1.15)}
+
+/* ---------- الترحيب ---------- */
+.onboard{position:absolute;inset:0;z-index:20;display:grid;place-items:center;padding:calc(5*var(--u));background:rgba(244,238,230,.55);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.onboard[hidden]{display:none}
+.onboard-card{width:min(100%,calc(96*var(--u)));border-radius:calc(6*var(--u));padding:calc(5*var(--u));text-align:center;background:rgba(255,255,255,.92)}
+.onboard-card h2{font-size:calc(5.4*var(--u));color:var(--green)}
+.onboard-card>p{color:var(--muted);font-size:calc(3.1*var(--u));margin-bottom:calc(3*var(--u))}
+.onboard-card ul{list-style:none;display:grid;gap:calc(2*var(--u));text-align:start;font-size:calc(3.3*var(--u));margin-bottom:calc(4*var(--u))}
+.onboard-card li{display:flex;align-items:center;gap:calc(2.4*var(--u))}
+.onboard-card li svg{flex:none;width:calc(7.4*var(--u));height:calc(7.4*var(--u));padding:calc(1.5*var(--u));border-radius:50%;background:var(--green-soft);color:var(--green)}
+.primary{width:100%;padding:calc(2.6*var(--u));border-radius:99px;background:var(--green);color:#fff;font-size:calc(3.8*var(--u));font-weight:700}
+
+/* ---------- نافذة الإعدادات ---------- */
+dialog{margin:auto;width:min(86vw,48dvh,440px);border:1px solid var(--stroke);border-radius:22px;background:#fbfdfb;color:var(--ink);padding:22px;font-size:17px;box-shadow:0 20px 60px rgba(22,60,32,.3)}
+dialog::backdrop{background:rgba(23,38,28,.45)}
+dialog h3{color:var(--green);font-size:21px;margin-bottom:10px;text-align:center}
+dialog .row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+dialog input[type=checkbox]{width:26px;height:26px;accent-color:var(--green)}
+dialog input[type=range]{width:50%;accent-color:var(--green)}
+dialog .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 10px}
+dialog .btns button{padding:13px;border-radius:99px;border:1.5px solid var(--green);color:var(--green)}
+dialog .primary{font-size:17px;padding:13px}
+
+/* ---------- الشاشات العرضية (لابتوب، كمبيوتر، آيباد بالعرض): مثل الصورة المعتمدة ---------- */
+@media (min-aspect-ratio:1/1){
+  .top{margin-top:calc(1.4*var(--u));padding:calc(1*var(--u)) calc(4*var(--u));margin-inline:max(var(--side),calc((100vw - 150*var(--u))/2))}
+  .top .logo{display:none}                       /* الشعاران ظاهران في الاستديو نفسه */
+  .ttl{display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;column-gap:calc(4*var(--u))}
+  .ttl h1{font-size:calc(4.6*var(--u))}
+  #stage{flex:1 1 calc(58*var(--u));max-height:none;margin-top:calc(-2*var(--u))}
+  .lower{flex:0 0 auto;margin-top:calc(-9*var(--u))}
+  #caption{flex:none;height:calc(17*var(--u));min-height:0;margin-inline:max(var(--side),calc((100vw - 150*var(--u))/2));padding-block:calc(1.4*var(--u));font-size:calc(2.9*var(--u)*var(--fs));line-height:1.65}
+  .chip{width:calc(46*var(--u));min-height:calc(9*var(--u))}
+  .mic-zone{height:calc(13.5*var(--u))}
+  .mic-btn{width:calc(12*var(--u));height:calc(12*var(--u))}
+  .input-row{padding-bottom:calc(2*var(--u))}
+  .sheet{inset-block-start:calc(-4*var(--u))}
+}
+
+/* ---------- الجوالات الصغيرة جداً: الأسئلة عمودية بدل الأفقية ---------- */
+@media (max-width:374px) and (max-aspect-ratio:1/1){
+  .carousel-wrap{-webkit-mask-image:none;mask-image:none}
+  .carousel{flex-direction:column;overflow-x:hidden;overflow-y:auto;scroll-snap-type:y mandatory;height:calc(23*var(--u));padding-block:0}
+  .chip{width:100%;min-height:calc(10*var(--u))}
+}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
